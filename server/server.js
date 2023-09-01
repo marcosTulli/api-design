@@ -1,74 +1,55 @@
 const express = require('express');
 const _ = require('lodash');
-const fs = require('fs');
-// const path = require('path');
 const app = express();
 const port = 3000;
 
-const FILE_NAME = './lions.json';
+// const FILE_NAME = './lions.json';
+let lions = [];
+let id = 0;
 
 app.use(express.static('client'));
 app.use(express.json());
 
 app.get('/lions', (req, res) => {
-  try {
-    fs.readFile(FILE_NAME, (err, data) => {
-      if (err) {
-        console.log('Unable to read', req.url);
-        res.status(500).send({ message: `Unable to read ${req.url}` });
-      } else {
-        res.status(201).send(JSON.parse(data));
-      }
-    });
-  } catch (err) {
-    res.status(500).send({ message: `Unable to read ${req.url}` });
-    console.log('Unable to read', req);
-  }
+  res.json(lions);
 });
 
 app.get('/lions/:id', (req, res) => {
-  try {
-    fs.readFile(FILE_NAME, (err, data) => {
-      if (err) {
-        console.log('Unable to read', req.url);
-        res.status(500).send({ message: `Unable to read ${req.url}` });
-      } else {
-        let object;
-        const id = req.params.id;
-        const parsedData = JSON.parse(data);
-        parsedData.forEach((i) => {
-          if (i.id === Number(id)) {
-            object = i;
-          }
-        });
-        res.status(201).send(object);
-      }
-    });
-  } catch (err) {
-    res.status(500).send({ message: `Unable to read ${req.url}` });
-    console.log('Unable to read', req);
+  const lion = _.find(lions, { id: req.params.id });
+  res.json(lion || {});
+});
+
+app.put('/lions/:id', (req, res) => {
+  const update = req.body;
+  if (update.id) {
+    delete update.id;
+  }
+  const lion = _.findIndex(lions, { id: req.params.id });
+  if (!lions[lion]) {
+    res.send();
+  } else {
+    const updatedLion = _.assign(lions[lion], update);
+    res.json(updatedLion);
   }
 });
 
 app.post('/lions', (req, res) => {
-  fs.readFile(FILE_NAME, (err, data) => {
-    if (err) {
-      rej(err);
-    } else {
-      const newData = req.body;
-      const lions = JSON.parse(data);
-      const newId = lions[lions.length - 1].id + 1;
-      newData['id'] = newId;
-      lions.push(newData);
-      fs.writeFile(FILE_NAME, JSON.stringify(lions), (err) => {
-        if (err) {
-          res.status(500).send(`Unable to POST ${req.body}`);
-        } else {
-          res.status(200).send(req.body);
-        }
-      });
-    }
-  });
+  let lion = req.body;
+  id++;
+  lion['id'] = id + '';
+  lions.push(lion);
+  res.json(lion);
+});
+
+app.delete('/lions/:id', (req, res) => {
+  const lion = _.findIndex(lions, { id: req.params.id });
+  if (!lions[lion]) {
+    res.send();
+  } else {
+    let deletedLion = lions[lion];
+    lions.splice(lion, 1);
+    res.json(deletedLion);
+  }
 });
 
 app.listen(port, () => {
