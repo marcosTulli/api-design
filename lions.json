@@ -19,5 +19,12 @@
         "age": "28",
         "gender": "male",
         "id": 3
+    },
+    {
+        "name": "PUMBA",
+        "pride": "NOT A LION",
+        "age": "1",
+        "gender": "female",
+        "id": 4
     }
 ]

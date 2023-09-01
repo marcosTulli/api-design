@@ -12,12 +12,12 @@ app.use(express.json());
 
 app.get('/lions', (req, res) => {
   try {
-    fs.readFile(FILE_NAME, (err, data) => {
+    fs.readFile(FILE_NAME, (err, buffer) => {
       if (err) {
         console.log('Unable to read', req.url);
         res.status(500).send({ message: `Unable to read ${req.url}` });
       } else {
-        res.status(201).send(JSON.parse(data));
+        res.status(201).send(JSON.parse(buffer));
       }
     });
   } catch (err) {
@@ -28,14 +28,14 @@ app.get('/lions', (req, res) => {
 
 app.get('/lions/:id', (req, res) => {
   try {
-    fs.readFile(FILE_NAME, (err, data) => {
+    fs.readFile(FILE_NAME, (err, buffer) => {
       if (err) {
         console.log('Unable to read', req.url);
         res.status(500).send({ message: `Unable to read ${req.url}` });
       } else {
         let object;
         const id = req.params.id;
-        const parsedData = JSON.parse(data);
+        const parsedData = JSON.parse(buffer);
         parsedData.forEach((i) => {
           if (i.id === Number(id)) {
             object = i;
@@ -51,16 +51,16 @@ app.get('/lions/:id', (req, res) => {
 });
 
 app.post('/lions', (req, res) => {
-  fs.readFile(FILE_NAME, (err, data) => {
+  fs.readFile(FILE_NAME, (err, buffer) => {
     if (err) {
       rej(err);
     } else {
-      const newData = req.body;
-      const lions = JSON.parse(data);
-      const newId = lions[lions.length - 1].id + 1;
-      newData['id'] = newId;
-      lions.push(newData);
-      fs.writeFile(FILE_NAME, JSON.stringify(lions), (err) => {
+      const newEntry = req.body;
+      const db = JSON.parse(buffer);
+      const newId = db[db.length - 1].id + 1;
+      newEntry['id'] = newId;
+      db.push(newEntry);
+      fs.writeFile(FILE_NAME, JSON.stringify(db), (err) => {
         if (err) {
           res.status(500).send(`Unable to POST ${req.body}`);
         } else {
