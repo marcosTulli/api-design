@@ -1,0 +1,23 @@
+[
+    {
+        "name": "SIMBA",
+        "id": 1,
+        "age": 3,
+        "pride": "TAKA TAKA",
+        "gender": "MALE"
+    },
+    {
+        "name": "MUFASA",
+        "pride": "THE KING",
+        "age": "10",
+        "gender": "female",
+        "id": 2
+    },
+    {
+        "name": "SCAR",
+        "pride": "EVIL BROTHER",
+        "age": "28",
+        "gender": "male",
+        "id": 3
+    }
+]
