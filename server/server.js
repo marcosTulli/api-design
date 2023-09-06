@@ -1,54 +1,30 @@
-const express = require('express');
-const _ = require('lodash');
-const app = express();
-const port = 3000;
+// TODO: user app.params to find the lion using the id
+// and then attach the lion to the req object and call next. Then in
+// '/lion/:id' just send back req.lion
 
-// const FILE_NAME = './lions.json';
-let lions = [];
-let id = 0;
+// create a middleware function to catch and handle errors, register it
+// as the last middleware on app
+
+// create a route middleware for POST /lions that will increment and
+// add an id to the incoming new lion object on req.body
+
+const express = require('express');
+const app = express();
+const _ = require('lodash');
+const lionsRouter = require('./lions');
+const tigersRouter = require('./tigers');
+
+const port = 3000;
 
 app.use(express.static('client'));
 app.use(express.json());
+app.use('/lions', lionsRouter);
+app.use('/tigers', tigersRouter);
 
-app.get('/lions', (req, res) => {
-  res.json(lions);
-});
-
-app.get('/lions/:id', (req, res) => {
-  const lion = _.find(lions, { id: req.params.id });
-  res.json(lion || {});
-});
-
-app.put('/lions/:id', (req, res) => {
-  const update = req.body;
-  if (update.id) {
-    delete update.id;
-  }
-  const lion = _.findIndex(lions, { id: req.params.id });
-  if (!lions[lion]) {
-    res.send();
-  } else {
-    const updatedLion = _.assign(lions[lion], update);
-    res.json(updatedLion);
-  }
-});
-
-app.post('/lions', (req, res) => {
-  let lion = req.body;
-  id++;
-  lion['id'] = id + '';
-  lions.push(lion);
-  res.json(lion);
-});
-
-app.delete('/lions/:id', (req, res) => {
-  const lion = _.findIndex(lions, { id: req.params.id });
-  if (!lions[lion]) {
-    res.send();
-  } else {
-    let deletedLion = lions[lion];
-    lions.splice(lion, 1);
-    res.json(deletedLion);
+app.use((err, req, res, next) => {
+  if (err) {
+    console.log(err);
+    res.status.send(err);
   }
 });
 
