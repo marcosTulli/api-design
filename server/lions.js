@@ -1,17 +1,17 @@
 const _ = require('lodash');
-const lionRouter = require('express').Router();
+const lionsRouter = require('express').Router();
 
 const lions = [
   {
-    'name': 'SIMBA',
-    'pride': 'LION KING',
+    'name': 'TONY',
+    'pride': 'RAWRR',
     'age': '1',
     'gender': 'male',
-    'id': 4,
+    'id': '1',
   },
 ];
 let id = 0;
-const updateId = function (req, res, next) {
+const updateId = (req, res, next) => {
   if (!req.body.id) {
     id++;
     req.body['id'] = id.toString();
@@ -19,9 +19,10 @@ const updateId = function (req, res, next) {
   next();
 };
 
-lionRouter.param('id', function (req, res, next, id) {
+lionsRouter.param('id', (req, res, next, id) => {
   const lion = _.find(lions, { id: id });
   if (lion) {
+    res.json(lion);
     req.lion = lion;
     next();
   } else {
@@ -29,51 +30,42 @@ lionRouter.param('id', function (req, res, next, id) {
   }
 });
 
-lionRouter.get('/lions', (req, res) => {
-  console.log('TUKI');
-  res.json(lions);
-});
+lionsRouter
+  .route('/')
+  .get((req, res) => {
+    res.json(lions);
+  })
+  .post(updateId, (req, res) => {
+    const lion = req.body;
+    lions.push(lion);
+    res.json(lion);
+  });
 
-lionRouter.get('/lions/:id', (req, res) => {
-  const lion = _.find(lions, { id: req.params.id });
-  res.json(lion || {});
-});
+lionsRouter
+  .route('/:id')
+  .get((req, res) => {
+    const lion = _.find(lions, { id: req.params.id });
+    res.json(lion || {});
+  })
+  .put((req, res) => {
+    const update = req.body;
+    if (update.id) {
+      delete update.id;
+    }
 
-lionRouter.post('/lions', updateId, (req, res) => {
-  const lion = req.body;
-  lions.push(lion);
-  res.json(lion);
-});
-
-lionRouter.put('/lions/:id', (req, res) => {
-  var update = req.body;
-  if (update.id) {
-    delete update.id;
-  }
-  const lion = _.findIndex(lions, { id: req.params.id });
-  if (!lions[lion]) {
-    res.send();
-  } else {
-    const updatedLion = _.assign(lions[lion], update);
-    res.json(updatedLion);
-  }
-});
-
-lionRouter.post('/lions', (req, res) => {
-  let lion = req.body;
-  lions.push(lion);
-  res.json(lion);
-});
-
-lionRouter.delete('/lions/:id', (req, res) => {
-  const lion = _.findIndex(lions, { id: req.params.id });
-  if (!lions[lion]) {
-    res.send();
-  } else {
-    let deletedLion = lions[lion];
+    const lion = _.findIndex(lions, { id: req.params.id });
+    if (!lions[lion]) {
+      res.send();
+    } else {
+      const updatedLion = _.assign(lions[lion], update);
+      res.json(updatedLion);
+    }
+  })
+  .delete((req, res) => {
+    const lion = _.findIndex(lions, { id: req.params.id });
     lions.splice(lion, 1);
-    res.json(deletedLion);
-  }
-});
 
-module.exports = lionRouter;
+    res.json(req.lion);
+  });
+
+module.exports = lionsRouter;
