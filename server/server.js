@@ -13,13 +13,6 @@ app.use(express.json());
 app.use('/lions', lionsRouter);
 app.use('/tigers', tigersRouter);
 
-app.use((err, req, res, next) => {
-  // if (err) {
-  //   console.log(err);
-  //   res.status(500).send(err);
-  // }
-});
-
 app.listen(PORT, () => {
   console.log('Running on PORT: ', PORT);
 });
