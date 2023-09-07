@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const _ = require('lodash');
@@ -5,7 +6,7 @@ const app = express();
 const lionsRouter = require('./lions');
 const tigersRouter = require('./tigers');
 
-const PORT = 3000;
+const PORT = process.env.PORT;
 
 app.use(morgan('dev'));
 app.use(express.static('client'));
