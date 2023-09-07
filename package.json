@@ -11,10 +11,12 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.13.2",
+    "chai": "^4.3.8",
     "dotenv": "^16.3.1",
     "express": "^4.13.1",
     "lodash": "^3.10.1",
     "morgan": "^1.10.0",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "supertest": "^6.3.3"
   }
 }
