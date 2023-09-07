@@ -1,6 +1,6 @@
 const express = require('express');
 const _ = require('lodash');
-const utils = require('../utils');
+const utils = require('../utils/utils');
 
 module.exports = (fileName) => {
   const router = express.Router();
