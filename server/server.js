@@ -3,7 +3,6 @@ const morgan = require('morgan');
 const _ = require('lodash');
 const app = express();
 const router = require('./router');
-// const tigersRouter = require('./tigers');
 const lions = './lions.json';
 const tigers = './tigers.json';
 
