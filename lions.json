@@ -1,1 +1,72 @@
-[{"name":"SIMBA","id":1,"age":3,"pride":"TAKA TAKA","gender":"MALE"},{"name":"MUFASA","pride":"THE KING","age":"10","gender":"female","id":2},{"name":"SCAR","pride":"EVIL BROTHER","age":"28","gender":"male","id":3},{"name":"PUMBA","pride":"NOT A LION","age":"1","gender":"female","id":4},{"name":"TUKI","age":"223","id":5},{"name":"EL MELENAS","pride":"Keh Diceh tzio","age":"4","gender":"female","id":6}]
+[
+    {
+        "id": "1",
+        "name": "Simba",
+        "pride": "Hakuna Matata",
+        "age": "3",
+        "gender": "Male"
+    },
+    {
+        "id": "2",
+        "name": "Mufasa",
+        "pride": "Remember who you are",
+        "age": "12",
+        "gender": "Male"
+    },
+    {
+        "id": "3",
+        "name": "Scar",
+        "pride": "Be prepared",
+        "age": "8",
+        "gender": "Male"
+    },
+    {
+        "id": "4",
+        "name": "Nala",
+        "pride": "Love will find a way",
+        "age": "3",
+        "gender": "Female"
+    },
+    {
+        "id": "5",
+        "name": "Timon",
+        "pride": "Hakuna Matata",
+        "age": "5",
+        "gender": "Male"
+    },
+    {
+        "id": "6",
+        "name": "Pumbaa",
+        "pride": "Hakuna Matata",
+        "age": "6",
+        "gender": "Male"
+    },
+    {
+        "id": "7",
+        "name": "Rafiki",
+        "pride": "The past can hurt",
+        "age": "70",
+        "gender": "Male"
+    },
+    {
+        "id": "8",
+        "name": "Sarabi",
+        "pride": "Everything you see exists together in a delicate balance",
+        "age": "10",
+        "gender": "Female"
+    },
+    {
+        "id": "9",
+        "name": "Kiara",
+        "pride": "The Circle of Life",
+        "age": "2",
+        "gender": "Female"
+    },
+    {
+        "id": "10",
+        "name": "Kovu",
+        "pride": "Outlands",
+        "age": "3",
+        "gender": "Male"
+    }
+]

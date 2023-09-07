@@ -18,8 +18,8 @@ let utils = {
       if (err) {
         rej(err);
       } else {
-        let pie = JSON.parse(data).find((p) => String(p.id) === id);
-        res(pie);
+        let item = JSON.parse(data).find((p) => String(p.id) === id);
+        res(item);
       }
     });
   },
@@ -30,32 +30,34 @@ let utils = {
       if (err) {
         rej(err);
       } else {
-        let pies = JSON.parse(data);
+        let items = JSON.parse(data);
         if (searchObject) {
-          pies = pies.filter(
+          items = items.filter(
             (p) =>
               (searchObject.id ? p.id == searchObject.id : true) &&
               (searchObject.name ? p.name.toLowerCase().indexOf(searchObject.name.toLowerCase()) >= 0 : true)
           );
         }
-        res(pies);
+        res(items);
       }
     });
   },
 
   // Add
-  insert: (file, newData, res, rej) => {
+  insert: (file, newEntry, res, rej) => {
     fs.readFile(file, (err, data) => {
       if (err) {
         rej(err);
       } else {
-        let pies = JSON.parse(data);
-        pies.push(newData);
-        fs.writeFile(file, JSON.stringify(pies), (err) => {
+        const db = JSON.parse(data);
+        const newId = String(db.length + 1);
+        newEntry.id = newId;
+        db.push(newEntry);
+        fs.writeFile(file, JSON.stringify(db), (err) => {
           if (err) {
             rej(err);
           } else {
-            res(newData);
+            res(newEntry);
           }
         });
       }
@@ -68,12 +70,11 @@ let utils = {
       if (err) {
         rej(err);
       } else {
-        let pies = JSON.parse(data);
-        let pie = pies.find((p) => String(p.id) === id);
-
-        if (pie) {
-          Object.assign(pie, newData);
-          fs.writeFile(file, JSON.stringify(pies), (err) => {
+        let items = JSON.parse(data);
+        let item = items.find((p) => String(p.id) === id);
+        if (item) {
+          Object.assign(item, newData);
+          fs.writeFile(file, JSON.stringify(items), (err) => {
             if (err) {
               rej(err);
             } else {
@@ -91,19 +92,15 @@ let utils = {
         rej(err);
       } else {
         let items = JSON.parse(data);
-        const item = items.findIndex((i) => String(i.id) === id);
-        if (item !== -1) {
-          items.splice(item, 1);
-          fs.writeFile(file, JSON.stringify(items), (err) => {
-            if (err) {
-              rej(err);
-            } else {
-              res({ message: `Item with ID ${id} deleted` });
-            }
-          });
-        } else {
-          res({ message: `Item with ID ${id} not found` });
-        }
+        let item = items.find((i) => String(i.id) === id);
+        const updatedItems = items.filter((i) => i.id !== item.id);
+        fs.writeFile(file, JSON.stringify(updatedItems), (err) => {
+          if (err) {
+            rej(err);
+          } else {
+            res({ message: `Item with ID ${id} deleted` });
+          }
+        });
       }
     });
   },
