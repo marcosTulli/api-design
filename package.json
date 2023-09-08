@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha server/spec.js",
     "dev": "nodemon ./index.js"
   },
   "author": "",
@@ -16,5 +16,10 @@
     "lodash": "^3.10.1",
     "morgan": "^1.6.1",
     "nodemon": "^3.0.1"
+  },
+  "devDependencies": {
+    "chai": "^4.3.8",
+    "colors": "^1.4.0",
+    "supertest": "^6.3.3"
   }
 }

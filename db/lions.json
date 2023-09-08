@@ -1,10 +1,9 @@
 [
     {
         "id": "1",
-        "name": "Simba",
-        "pride": "Hakuna Matata",
         "age": "3",
-        "gender": "Male"
+        "gender": "Male",
+        "name": "chabon"
     },
     {
         "id": "2",
@@ -68,5 +67,11 @@
         "pride": "Outlands",
         "age": "3",
         "gender": "Male"
+    },
+    {
+        "name": "Mufasa",
+        "age": 100,
+        "pride": "Evil lions",
+        "id": "12"
     }
 ]
