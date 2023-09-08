@@ -22,11 +22,10 @@ const updateId = (req, res, next) => {
 lionsRouter.param('id', (req, res, next, id) => {
   const lion = _.find(lions, { id: id });
   if (lion) {
-    res.json(lion);
     req.lion = lion;
     next();
   } else {
-    res.send();
+    res.status(404).json({ error: 'Not found' });
   }
 });
 

@@ -22,11 +22,10 @@ const updateId = (req, res, next) => {
 tigersRouter.param('id', (req, res, next, id) => {
   const tiger = _.find(tigers, { id: id });
   if (tiger) {
-    res.json(tiger);
     req.tiger = tiger;
     next();
   } else {
-    res.send();
+    res.status(404).json({ error: 'Not found' });
   }
 });
 
