@@ -4,22 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha server/spec.js",
-    "dev": "nodemon ./index.js"
+    "start": "nodemon index.js",
+    "test": ""
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.13.2",
-    "dotenv": "^16.3.1",
+    "colors": "^1.1.2",
     "express": "^4.13.1",
-    "lodash": "^3.10.1",
-    "morgan": "^1.6.1",
-    "nodemon": "^3.0.1"
+    "lodash": "^3.10.0",
+    "morgan": "^1.6.1"
   },
   "devDependencies": {
-    "chai": "^4.3.8",
-    "colors": "^1.4.0",
-    "supertest": "^6.3.3"
+    "chai": "^3.2.0",
+    "supertest": "^1.0.1"
   }
 }
