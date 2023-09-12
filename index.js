@@ -5,12 +5,20 @@
 // automatically require the index.js on the root
 
 // setup config first before anything by requiring it
-const config = require('./server/config/config');
-const logger = require('./server/util/logger');
-const app = require('./server/server');
-// logger is a wrapper around console.log that adds color,
-// logs objects as json and can be conditionally turned off
-// so you don't have to erase all calls to it
+// const config = require('./server/config/config');
+// const app = require('./server/server');
+// const logger = require('./server/util/logger');
+// require('dotenv').config();
 
-app.listen(config.port);
-logger.log('listening on http://localhost:' + config.port);
+// app.listen(config.port);
+// logger.log('listening on http://localhost:' + config.port);
+
+const action = (cb) => {
+  setTimeout(() => {
+    cb('hey');
+  }, 5000);
+};
+
+action((arg) => {
+  console.log(arg);
+});
