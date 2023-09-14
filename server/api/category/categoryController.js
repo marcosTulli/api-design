@@ -1,63 +1,69 @@
-var Category = require('./categoryModel');
-var _ = require('lodash');
+const Category = require('./categoryModel');
+const _ = require('lodash');
 
-exports.params = function(req, res, next, id) {
-  Category.findById(id)
-    .then(function(category) {
+exports.params = (req, res, next, id) => {
+  Category.findById(id).then(
+    (category) => {
       if (!category) {
         next(new Error('No category with that id'));
       } else {
         req.category = category;
         next();
       }
-    }, function(err) {
+    },
+    (err) => {
       next(err);
-    });
+    }
+  );
 };
 
-exports.get = function(req, res, next) {
-  Category.find({})
-    .then(function(categories){
+exports.get = (req, res, next) => {
+  Category.find({}).then(
+    (categories) => {
       res.json(categories);
-    }, function(err){
+    },
+    (err) => {
       next(err);
-    });
+    }
+  );
 };
 
-exports.getOne = function(req, res, next) {
+exports.getOne = (req, res, next) => {
   var category = req.category;
   res.json(category);
 };
 
-exports.put = function(req, res, next) {
+exports.put = (req, res, next) => {
   var category = req.category;
 
   var update = req.body;
 
   _.merge(category, update);
 
-  category.save(function(err, saved) {
+  category.save((err, saved) => {
     if (err) {
       next(err);
     } else {
       res.json(saved);
     }
-  })
+  });
 };
 
-exports.post = function(req, res, next) {
+exports.post = (req, res, next) => {
   var newcategory = req.body;
 
-  Category.create(newcategory)
-    .then(function(category) {
+  Category.create(newcategory).then(
+    (category) => {
       res.json(category);
-    }, function(err) {
+    },
+    (err) => {
       next(err);
-    });
+    }
+  );
 };
 
-exports.delete = function(req, res, next) {
-  req.category.remove(function(err, removed) {
+exports.delete = (req, res, next) => {
+  req.category.remove((err, removed) => {
     if (err) {
       next(err);
     } else {

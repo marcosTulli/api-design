@@ -1,7 +1,7 @@
-var router = require('express').Router();
-var logger = require('../../util/logger');
-var controller = require('./postController');
-var createRoutes = require('../../util/createRoutes');
+const router = require('express').Router();
+const logger = require('../../util/logger');
+const controller = require('./postController');
+const createRoutes = require('../../util/createRoutes');
 createRoutes(controller, router);
 
 module.exports = router;

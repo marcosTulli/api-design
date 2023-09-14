@@ -1,46 +1,36 @@
 const { MongoClient, ObjectId, Db } = require('mongodb');
-const { MONGO_URL, DB_NAME } = require('../variables');
+const logger = require('../../util/logger');
 const { users } = require('../collections');
-var User = require('./userModel');
-var _ = require('lodash');
+const User = require('./userModel');
+require('dotenv').config();
+const _ = require('lodash');
+
+const MONGO_URL = process.env.MONGO_URL;
+const DB_NAME = process.env.DB_NAME;
 
 exports.params = async function (req, res, next, id) {
-  // return new Promise(async (res, rej) => {
   const client = new MongoClient(MONGO_URL);
+  const db = client.db(DB_NAME);
+  const item = await db.collection(users).findOne(id);
   try {
-    await client.connect();
-    const db = client.db(DB_NAME);
-    const user = await db.collection(users).findOne(new ObjectId(id));
-    client.close();
-  } catch (error) {
-    rej(error);
-  }
-  // });
-
-  User.findById(id).then(
-    function (user) {
-      if (!user) {
-        next(new Error('No user with that id'));
-      } else {
-        req.user = user;
-        next();
-      }
-    },
-    function (err) {
-      next(err);
+    if (item) {
+      req.user = item;
     }
-  );
+  } catch (err) {
+    next(err);
+  }
 };
 
-exports.get = function (req, res, next) {
-  User.find({}).then(
-    function (users) {
-      res.json(users);
-    },
-    function (err) {
-      next(err);
-    }
-  );
+exports.get = async function (req, res, next) {
+  const client = new MongoClient(MONGO_URL);
+  try {
+    client.connect();
+    const db = client.db(DB_NAME);
+    const items = db.collection('users');
+    res.send('TUKI');
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.getOne = function (req, res, next) {
