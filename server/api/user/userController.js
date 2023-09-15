@@ -1,20 +1,34 @@
-const { MongoClient, ObjectId, Db } = require('mongodb');
-const logger = require('../../util/logger');
-const { users } = require('../collections');
-const User = require('./userModel');
 require('dotenv').config();
-const _ = require('lodash');
-
+const { MongoClient } = require('mongodb');
 const MONGO_URL = process.env.MONGO_URL;
 const DB_NAME = process.env.DB_NAME;
+const client = new MongoClient(MONGO_URL);
+
+const connectToMongo = async () => {
+  try {
+    await client.connect();
+    console.log('Connected to MongoDB');
+
+    const db = client.db(DB_NAME);
+    const collection = db.collection('users');
+
+    return collection;
+  } catch (err) {
+    console.error('Error connecting to MongoDB:', err);
+    throw err;
+  }
+};
 
 exports.params = async function (req, res, next, id) {
-  const client = new MongoClient(MONGO_URL);
-  const db = client.db(DB_NAME);
-  const item = await db.collection(users).findOne(id);
+  const collection = await connectToMongo();
   try {
-    if (item) {
-      req.user = item;
+    const user = await collection.findOne({ id: id });
+    if (!user) {
+      next(new Error('No user with that id'));
+    } else {
+      req.user = user;
+      client.close();
+      next();
     }
   } catch (err) {
     next(err);
@@ -22,42 +36,20 @@ exports.params = async function (req, res, next, id) {
 };
 
 exports.get = async function (req, res, next) {
-  const client = new MongoClient(MONGO_URL);
+  const collection = await connectToMongo();
   try {
-    client.connect();
-    const db = client.db(DB_NAME);
-    const items = db.collection('users');
-    res.send('TUKI');
-  } catch (err) {
-    next(err);
+    let items = collection.find();
+    res.json(await items.toArray());
+    client.close();
+  } catch (error) {
+    next(error);
   }
 };
 
-exports.getOne = function (req, res, next) {
-  var user = req.user;
-  res.json(user);
-};
-
-exports.put = function (req, res, next) {
-  var user = req.user;
-
-  var update = req.body;
-
-  _.merge(user, update);
-
-  user.save(function (err, saved) {
-    if (err) {
-      next(err);
-    } else {
-      res.json(saved);
-    }
-  });
-};
-
-exports.post = function (req, res, next) {
-  var newUser = req.body;
-
-  User.create(newUser).then(
+exports.post = async function (req, res, next) {
+  const newUser = req.body;
+  const collection = await connectToMongo();
+  collection.insertOne(newUser).then(
     function (user) {
       res.json(user);
     },
@@ -67,12 +59,28 @@ exports.post = function (req, res, next) {
   );
 };
 
-exports.delete = function (req, res, next) {
-  req.user.remove(function (err, removed) {
-    if (err) {
-      next(err);
-    } else {
-      res.json(removed);
-    }
-  });
+exports.getById = function (req, res, next) {
+  const user = req.user;
+  res.json(user);
+};
+
+exports.put = async function (req, res, next) {
+  const collection = await connectToMongo();
+  const user = req.user;
+  if (user) {
+    const update = req.body;
+    const updatedItem = await collection.findOneAndReplace({ id: req.user.id }, update, {
+      returnDocument: 'after',
+    });
+    res.json(updatedItem.value);
+  } else {
+    next(err);
+  }
+};
+
+exports.delete = async function (req, res, next) {
+  const collection = await connectToMongo();
+  const removed = await collection.deleteOne({ id: req.user.id });
+  res.send(removed.deletedCount === 1);
+  next();
 };
