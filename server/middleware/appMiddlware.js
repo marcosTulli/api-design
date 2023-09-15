@@ -1,9 +1,8 @@
-var morgan = require('morgan');
-var bodyParser = require('body-parser');
+const morgan = require('morgan');
+const exprpress = require('express');
 // setup global middleware here
 
-module.exports = function(app) {
+module.exports = (app) => {
   app.use(morgan('dev'));
-  app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(bodyParser.json());
+  app.use(exprpress.json());
 };
